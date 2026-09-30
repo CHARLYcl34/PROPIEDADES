@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor de Ficha Interactiva | Palos Verdes Inmobiliaria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0F382A;
+      --primary-light: #18523E;
+      --accent: #D4AF37;
+      --whatsapp: #25D366;
+      --infonavit: #D92534;
+      --bg: #0F172A;
+      --card-bg: #FFFFFF;
+      --text: #0F172A;
+      --muted: #64748B;
+      --border: #E2E8F0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 20px 10px;
+      min-height: 100vh;
+    }
+
+    /* Contenedor tipo Celular */
+    .app-wrapper {
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+    }
+
+    /* Botón flotante para abrir/cerrar editor */
+    .btn-toggle-editor {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: #D4AF37;
+      color: #000;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 10px 16px;
+      border-radius: 9999px;
+      border: 2px solid #FFF;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      cursor: pointer;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Panel Lateral de Edición (Modal Deslizable) */
+    .editor-drawer {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(6px);
+      z-index: 999;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .editor-drawer.open {
+      display: flex;
+    }
+
+    .editor-box {
+      width: 100%;
+      max-width: 480px;
+      max-height: 88vh;
+      background: #FFFFFF;
+      border-radius: 24px 24px 0 0;
+      padding: 24px 20px;
+      overflow-y: auto;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+    }
+
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .editor-header h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .btn-close-editor {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--muted);
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      background: #F8FAFC;
+      border: 2px dashed #CBD5E1;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* Tarjeta Vista Móvil Principal */
+    .mobile-card {
+      background: var(--card-bg);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .badge-status {
+      background: #DCFCE7;
+      color: #166534;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+    }
+
+    /* Imagen Hero Portada */
+    .hero-media {
+      position: relative;
+      height: 250px;
+      background: #1E293B;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      color: #FFF;
+      overflow: hidden;
+    }
+
+    .hero-img-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    .hero-gradient {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(15,23,42,0.85) 100%);
+      z-index: 2;
+    }
+
+    .hero-top-badge {
+      position: relative;
+      z-index: 3;
+      align-self: flex-start;
+      background: var(--primary);
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .hero-overlay-text {
+      position: relative;
+      z-index: 3;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    }
+
+    .hero-overlay-text .zone {
+      font-size: 12px;
+      font-weight: 600;
+      color: #E2E8F0;
+      text-transform: uppercase;
+    }
+
+    .hero-overlay-text .title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    /* Galería Interactiva con Tabs */
+    .gallery-preview {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 10px 16px;
+      background: #F8FAFC;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .thumb-btn {
+      height: 52px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .thumb-btn.active {
+      border-color: var(--primary);
+    }
+
+    .thumb-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .content-body {
+      padding: 20px;
+    }
+
+    .price-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+
+    .price-val {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .price-type {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      background: #F8FAFC;
+      padding: 12px 8px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .spec-item .value {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+    }
+
+    .spec-item .label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+      display: block;
+    }
+
+    .hub-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .btn-hub {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-maps {
+      background: #FFFFFF;
+      color: #0F172A;
+      border: 1.5px solid #CBD5E1;
+    }
+
+    .btn-drive {
+      background: #EFF6FF;
+      color: #1D4ED8;
+      border: 1.5px solid #BFDBFE;
+    }
+
+    .section-header {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .tab-pills {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px 4px;
+      background: #F1F5F9;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #FFF;
+      border-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+      background: #F8FAFC;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 14px;
+      margin-bottom: 22px;
+    }
+
+    .tab-content.active { display: block; }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .feature-list li {
+      font-size: 13px;
+      color: #334155;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+
+    .feature-list li::before {
+      content: "✔";
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    /* Simulador Financiero Dual */
+    .mortgage-calculator {
+      background: #FFFFFF;
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+
+    .calc-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: #F1F5F9;
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+
+    .calc-toggle-btn {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .calc-toggle-btn.active-bank {
+      background: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .calc-toggle-btn.active-infonavit {
+      background: var(--infonavit);
+      color: #FFFFFF;
+    }
+
+    .calc-control { margin-bottom: 14px; }
+
+    .calc-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .calc-range {
+      width: 100%;
+      height: 6px;
+      background: #E2E8F0;
+      border-radius: 5px;
+      outline: none;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .calc-range.infonavit-slider { accent-color: var(--infonavit); }
+
+    .term-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .term-btn {
+      padding: 8px 0;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .term-btn.active {
+      border-color: var(--primary);
+      background: #F0FDF4;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .term-btn.active-infonavit {
+      border-color: var(--infonavit);
+      background: #FEF2F2;
+      color: var(--infonavit);
+      font-weight: 700;
+    }
+
+    .calc-display {
+      background: #F8FAFC;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .display-tag {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .display-amount {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 4px 0 10px 0;
+    }
+
+    .display-amount.red { color: var(--infonavit); }
+
+    .calc-breakdown {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      text-align: left;
+    }
+
+    .breakdown-item span {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .breakdown-item strong {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 2px;
+    }
+
+    .agent-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 16px;
+    }
+
+    .agent-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .agent-details h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .agent-details p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .btn-whatsapp-cta {
+      background: var(--whatsapp);
+      color: #FFFFFF;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      padding: 15px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BOTÓN FLOTANTE PARA EDITAR -->
+  <button class="btn-toggle-editor" onclick="openEditor()">
+    ✏️ Editar Ficha / Fotos
+  </button>
+
+  <div class="app-wrapper">
+    <div class="mobile-card">
+
+      <!-- Header -->
+      <div class="header-bar">
+        <div class="brand-title" id="view-brand">Palos Verdes Inmobiliaria</div>
+        <div class="badge-status" id="view-status">Disponible</div>
+      </div>
+
+      <!-- Hero con Imagen Seleccionada -->
+      <div class="hero-media">
+        <img id="main-hero-img" class="hero-img-bg" src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80" alt="Fachada">
+        <div class="hero-gradient"></div>
+        <div class="hero-top-badge" id="view-top-badge">En Venta • 2 Plantas</div>
+        <div class="hero-overlay-text">
+          <div class="zone" id="view-colonia">FRACC. LÁZARO CÁRDENAS / PRADO BONITO</div>
+          <h1 class="title" id="view-title">Casa Residencial</h1>
+        </div>
+      </div>
+
+      <!-- Mini Galería de Fotos Seleccionables -->
+      <div class="gallery-preview">
+        <div class="thumb-btn active" onclick="selectGalleryImg(0, this)">
+          <img id="thumb-0" src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=400&q=80">
+        </div>
+        <div class="thumb-btn" onclick="selectGalleryImg(1, this)">
+          <img id="thumb-1" src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=400&q=80">
+        </div>
+        <div class="thumb-btn" onclick="selectGalleryImg(2, this)">
+          <img id="thumb-2" src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=80">
+        </div>
+        <div class="thumb-btn" onclick="selectGalleryImg(3, this)">
+          <img id="thumb-3" src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=400&q=80">
+        </div>
+      </div>
+
+      <!-- Contenido Principal -->
+      <div class="content-body">
+
+        <!-- Precio -->
+        <div class="price-container">
+          <div class="price-val" id="view-price">$1,700,000 MXN</div>
+          <div class="price-type" id="view-credits">Infonavit / Bancario / Contado</div>
+        </div>
+
+        <!-- Quick Specs -->
+        <div class="specs-grid">
+          <div class="spec-item">
+            <span class="value" id="view-terreno">136 m²</span>
+            <span class="label">Terreno (8x17)</span>
+          </div>
+          <div class="spec-item">
+            <span class="value" id="view-construccion">90 m²</span>
+            <span class="label">Construcción</span>
+          </div>
+          <div class="spec-item">
+            <span class="value" id="view-recamaras">3</span>
+            <span class="label">Recámaras</span>
+          </div>
+          <div class="spec-item">
+            <span class="value" id="view-banos">1.5</span>
+            <span class="label">Baños</span>
+          </div>
+        </div>
+
+        <!-- Botones de Enlace -->
+        <div class="hub-actions">
+          <a id="btn-maps-link" href="https://maps.app.goo.gl/KEf251n3VZxJtZKT9" target="_blank" class="btn-hub btn-maps">
+            📍 Abrir Ubicación en Google Maps
+          </a>
+          <a id="btn-drive-link" href="https://drive.google.com/drive/folders/1VM91j0lHWMTLq4CcB6RWa20x-tjgDdkG?usp=drive_link" target="_blank" class="btn-hub btn-drive">
+            📁 Ver Fotos y Video en Alta Definición (Drive)
+          </a>
+        </div>
+
+        <!-- Pestañas de Distribución -->
+        <div class="section-header">Distribución del Inmueble</div>
+        <div class="tab-pills">
+          <button class="tab-btn active" onclick="switchTab('exterior', this)">Exterior</button>
+          <button class="tab-btn" onclick="switchTab('baja', this)">Planta Baja</button>
+          <button class="tab-btn" onclick="switchTab('alta', this)">Planta Alta</button>
+        </div>
+
+        <div id="tab-exterior" class="tab-content active">
+          <ul class="feature-list" id="view-desc-exterior">
+            <li><strong>Cochera privada</strong> para 2 vehículos al frente.</li>
+            <li><strong>Pasillo de servicio independiente</strong> (acceso directo sin entrar a la casa).</li>
+            <li><strong>Patio posterior amplio</strong> con gran metraje para área social, asador o futura ampliación.</li>
+          </ul>
+        </div>
+
+        <div id="tab-baja" class="tab-content">
+          <ul class="feature-list" id="view-desc-baja">
+            <li><strong>Sala y comedor</strong> corridos con excelente entrada de luz natural.</li>
+            <li><strong>Cocina integral equipada con isla funcional</strong> (desayunador y preparación).</li>
+            <li><strong>Medio baño</strong> de visitas en planta baja.</li>
+            <li>Salida directa al patio trasero.</li>
+          </ul>
+        </div>
+
+        <div id="tab-alta" class="tab-content">
+          <ul class="feature-list" id="view-desc-alta">
+            <li><strong>3 recámaras</strong> bien distribuidas con área destinada para clóset.</li>
+            <li><strong>1 baño completo</strong> con acabados modernos.</li>
+            <li>Distribuidor iluminado hacia las habitaciones.</li>
+          </ul>
+        </div>
+
+        <!-- Calculadora Dual -->
+        <div class="section-header">Simulador Financiero Oficial</div>
+        <div class="mortgage-calculator">
+          
+          <div class="calc-toggle">
+            <button id="btn-mode-bank" class="calc-toggle-btn active-bank" onclick="setCreditMode('bank')">
+              🏦 Crédito Bancario
+            </button>
+            <button id="btn-mode-infonavit" class="calc-toggle-btn" onclick="setCreditMode('infonavit')">
+              🏠 INFONAVIT
+            </button>
+          </div>
+
+          <!-- Controles Banco -->
+          <div id="bank-controls">
+            <div class="calc-control">
+              <div class="calc-label-row">
+                <span>Enganche aportado:</span>
+                <strong id="bank-down-label">$170,000 (10%)</strong>
+              </div>
+              <input type="range" min="10" max="50" step="5" value="10" class="calc-range" id="bank-down-slider" oninput="calculateAll()">
+            </div>
+
+            <div class="calc-control">
+              <div class="calc-label-row">
+                <span>Tasa Anual del Banco:</span>
+                <strong id="bank-rate-label">10.25% anual</strong>
+              </div>
+              <input type="range" min="8.5" max="13.5" step="0.25" value="10.25" class="calc-range" id="bank-rate-slider" oninput="calculateAll()">
+            </div>
+
+            <div class="calc-control">
+              <div class="calc-label-row">
+                <span>Plazo del financiamiento:</span>
+                <strong id="bank-term-label">20 años</strong>
+              </div>
+              <div class="term-selector">
+                <button class="term-btn" onclick="setTerm(10, this)">10 años</button>
+                <button class="term-btn" onclick="setTerm(15, this)">15 años</button>
+                <button class="term-btn active" onclick="setTerm(20, this)">20 años</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controles Infonavit -->
+          <div id="infonavit-controls" style="display: none;">
+            <div class="calc-control">
+              <div class="calc-label-row">
+                <span>Tu Salario Mensual Bruto:</span>
+                <strong id="info-salary-label">$25,000 MXN</strong>
+              </div>
+              <input type="range" min="10000" max="75000" step="2500" value="25000" class="calc-range infonavit-slider" id="info-salary-slider" oninput="calculateAll()">
+            </div>
+
+            <div class="calc-control">
+              <div class="calc-label-row">
+                <span>Saldo Subcuenta de Vivienda (SSV):</span>
+                <strong id="info-ssv-label">$120,000 MXN</strong>
+              </div>
+              <input type="range" min="20000" max="500000" step="10000" value="120000" class="calc-range infonavit-slider" id="info-ssv-slider" oninput="calculateAll()">
+            </div>
+
+            <div class="calc-control">
+              <div class="calc-label-row">
+                <span>Plazo Infonavit:</span>
+                <strong id="info-term-label">30 años</strong>
+              </div>
+              <div class="term-selector">
+                <button class="term-btn" onclick="setInfoTerm(15, this)">15 años</button>
+                <button class="term-btn" onclick="setInfoTerm(20, this)">20 años</button>
+                <button class="term-btn active-infonavit" onclick="setInfoTerm(30, this)">30 años</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resultados Dinámicos -->
+          <div class="calc-display">
+            <div class="display-tag" id="result-title">Mensualidad Total Estimada</div>
+            <div class="display-amount" id="result-monthly">$15,480 MXN</div>
+
+            <div class="calc-breakdown">
+              <div class="breakdown-item">
+                <span id="label-sub1">Monto de Crédito</span>
+                <strong id="val-sub1">$1,530,000</strong>
+              </div>
+              <div class="breakdown-item">
+                <span id="label-sub2">Ingreso Mínimo Sugerido</span>
+                <strong id="val-sub2">$38,700 / mes</strong>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Asesor -->
+        <div class="agent-box">
+          <div class="agent-avatar" id="view-avatar">CC</div>
+          <div class="agent-details">
+            <h4 id="view-agent-name">Carlos Ramón Calderón</h4>
+            <p id="view-agent-role">Asesor Inmobiliario | Palos Verdes</p>
+          </div>
+        </div>
+
+        <!-- CTA WhatsApp -->
+        <a id="btn-dynamic-wa" href="#" target="_blank" class="btn-whatsapp-cta">
+          💬 Solicitar Precalificación de Crédito
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL DESLIZABLE DE EDICIÓN -->
+  <div class="editor-drawer" id="editor-drawer">
+    <div class="editor-box">
+      <div class="editor-header">
+        <h3>✏️ Editar Datos de la Propiedad</h3>
+        <button class="btn-close-editor" onclick="closeEditor()">&times;</button>
+      </div>
+
+      <!-- Subida de Fotos -->
+      <div class="form-group">
+        <label>🖼️ Cargar Fotos Reales de la Casa:</label>
+        <div class="file-input-wrapper" style="margin-bottom: 8px;">
+          📸 Subir Foto 1 (Fachada Principal / Portada)
+          <input type="file" accept="image/*" onchange="uploadImage(0, event)">
+        </div>
+        <div class="file-input-wrapper" style="margin-bottom: 8px;">
+          🍳 Subir Foto 2 (Cocina / Isla)
+          <input type="file" accept="image/*" onchange="uploadImage(1, event)">
+        </div>
+        <div class="file-input-wrapper" style="margin-bottom: 8px;">
+          🛏️ Subir Foto 3 (Recámaras / Baño)
+          <input type="file" accept="image/*" onchange="uploadImage(2, event)">
+        </div>
+        <div class="file-input-wrapper">
+          🌳 Subir Foto 4 (Patio / Fachada Posterior)
+          <input type="file" accept="image/*" onchange="uploadImage(3, event)">
+        </div>
+      </div>
+
+      <!-- Datos Comerciales -->
+      <div class="form-group">
+        <label>Nombre de la Propiedad:</label>
+        <input type="text" class="form-control" id="edit-title" value="Residencial 2 Plantas" oninput="updateLive()">
+      </div>
+
+      <div class="form-group">
+        <label>Colonia / Sector (Los Mochis):</label>
+        <input type="text" class="form-control" id="edit-colonia" value="FRACC. LÁZARO CÁRDENAS / PRADO BONITO" oninput="updateLive()">
+      </div>
+
+      <div class="form-group">
+        <label>Precio de Venta (MXN sin comas):</label>
+        <input type="number" class="form-control" id="edit-price" value="1700000" oninput="updateLive()">
+      </div>
+
+      <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div>
+          <label>Terreno (m²):</label>
+          <input type="text" class="form-control" id="edit-terreno" value="136 m²" oninput="updateLive()">
+        </div>
+        <div>
+          <label>Construcción (m²):</label>
+          <input type="text" class="form-control" id="edit-construccion" value="90 m²" oninput="updateLive()">
+        </div>
+      </div>
+
+      <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div>
+          <label>Recámaras:</label>
+          <input type="number" class="form-control" id="edit-recamaras" value="3" oninput="updateLive()">
+        </div>
+        <div>
+          <label>Baños:</label>
+          <input type="text" class="form-control" id="edit-banos" value="1.5" oninput="updateLive()">
+        </div>
+      </div>
+
+      <!-- Enlaces -->
+      <div class="form-group">
+        <label>Link Google Maps:</label>
+        <input type="text" class="form-control" id="edit-maps" value="https://maps.app.goo.gl/KEf251n3VZxJtZKT9" oninput="updateLive()">
+      </div>
+
+      <div class="form-group">
+        <label>Link Carpeta Drive (Fotos HD):</label>
+        <input type="text" class="form-control" id="edit-drive" value="https://drive.google.com/drive/folders/1VM91j0lHWMTLq4CcB6RWa20x-tjgDdkG?usp=drive_link" oninput="updateLive()">
+      </div>
+
+      <div class="form-group">
+        <label>Tu Teléfono WhatsApp (10 dígitos):</label>
+        <input type="text" class="form-control" id="edit-whatsapp" value="6681631420" oninput="updateLive()">
+      </div>
+
+      <button class="btn-whatsapp-cta" style="width: 100%; border: none; margin-top: 10px;" onclick="closeEditor()">
+        Listo / Ver Resultado
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let galleryImages = [
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"
+    ];
+
+    let propertyPrice = 1700000;
+    let currentMode = 'bank';
+    let selectedBankYears = 20;
+    let selectedInfoYears = 30;
+
+    // Funciones del Modal Editor
+    function openEditor() { document.getElementById('editor-drawer').classList.add('open'); }
+    function closeEditor() { document.getElementById('editor-drawer').classList.remove('open'); }
+
+    // Cargar fotos desde el celular o computadora
+    function uploadImage(index, event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          galleryImages[index] = e.target.result;
+          document.getElementById('thumb-' + index).src = e.target.result;
+          if (index === 0) {
+            document.getElementById('main-hero-img').src = e.target.result;
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Seleccionar foto de la galería para el Hero
+    function selectGalleryImg(index, el) {
+      document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('main-hero-img').src = galleryImages[index];
+    }
+
+    // Actualización en Vivo desde los Inputs
+    function updateLive() {
+      const title = document.getElementById('edit-title').value;
+      const colonia = document.getElementById('edit-colonia').value;
+      const priceVal = parseFloat(document.getElementById('edit-price').value) || 0;
+      propertyPrice = priceVal;
+
+      document.getElementById('view-title').innerText = title;
+      document.getElementById('view-colonia').innerText = colonia;
+      document.getElementById('view-price').innerText = '$' + priceVal.toLocaleString('es-MX') + ' MXN';
+
+      document.getElementById('view-terreno').innerText = document.getElementById('edit-terreno').value;
+      document.getElementById('view-construccion').innerText = document.getElementById('edit-construccion').value;
+      document.getElementById('view-recamaras').innerText = document.getElementById('edit-recamaras').value;
+      document.getElementById('view-banos').innerText = document.getElementById('edit-banos').value;
+
+      document.getElementById('btn-maps-link').href = document.getElementById('edit-maps').value;
+      document.getElementById('btn-drive-link').href = document.getElementById('edit-drive').value;
+
+      calculateAll();
+    }
+
+    // Pestañas
+    function switchTab(tabKey, element) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      element.classList.add('active');
+      document.getElementById('tab-' + tabKey).classList.add('active');
+    }
+
+    // Selector Crédito
+    function setCreditMode(mode) {
+      currentMode = mode;
+      const btnBank = document.getElementById('btn-mode-bank');
+      const btnInfo = document.getElementById('btn-mode-infonavit');
+      const bankControls = document.getElementById('bank-controls');
+      const infoControls = document.getElementById('infonavit-controls');
+      const resultMonthly = document.getElementById('result-monthly');
+
+      if (mode === 'bank') {
+        btnBank.className = 'calc-toggle-btn active-bank';
+        btnInfo.className = 'calc-toggle-btn';
+        bankControls.style.display = 'block';
+        infoControls.style.display = 'none';
+        resultMonthly.classList.remove('red');
+      } else {
+        btnBank.className = 'calc-toggle-btn';
+        btnInfo.className = 'calc-toggle-btn active-infonavit';
+        bankControls.style.display = 'none';
+        infoControls.style.display = 'block';
+        resultMonthly.classList.add('red');
+      }
+      calculateAll();
+    }
+
+    function setTerm(years, btn) {
+      selectedBankYears = years;
+      document.querySelectorAll('#bank-controls .term-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('bank-term-label').innerText = years + ' años';
+      calculateAll();
+    }
+
+    function setInfoTerm(years, btn) {
+      selectedInfoYears = years;
+      document.querySelectorAll('#infonavit-controls .term-btn').forEach(b => b.classList.remove('active-infonavit'));
+      btn.classList.add('active-infonavit');
+      document.getElementById('info-term-label').innerText = years + ' años';
+      calculateAll();
+    }
+
+    function calculatePMT(principal, annualRatePct, years) {
+      const monthlyRate = (annualRatePct / 100) / 12;
+      const totalPayments = years * 12;
+      return (principal * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments))) / (Math.pow(1 + monthlyRate, totalPayments) - 1);
+    }
+
+    function calculateAll() {
+      const waNumber = document.getElementById('edit-whatsapp').value || '6681631420';
+
+      if (currentMode === 'bank') {
+        const downPct = parseInt(document.getElementById('bank-down-slider').value);
+        const annualRate = parseFloat(document.getElementById('bank-rate-slider').value);
+        
+        const downpayment = propertyPrice * (downPct / 100);
+        const loanAmount = propertyPrice - downpayment;
+
+        document.getElementById('bank-down-label').innerText = '$' + downpayment.toLocaleString('es-MX') + ' (' + downPct + '%)';
+        document.getElementById('bank-rate-label').innerText = annualRate.toFixed(2) + '% anual';
+
+        const pmtBase = calculatePMT(loanAmount, annualRate, selectedBankYears);
+        const insurances = loanAmount * 0.0008;
+        const totalMonthly = Math.round(pmtBase + insurances);
+        const requiredIncome = Math.round(totalMonthly / 0.38);
+
+        document.getElementById('result-title').innerText = 'Mensualidad Bancaria Estimada';
+        document.getElementById('result-monthly').innerText = '$' + totalMonthly.toLocaleString('es-MX') + ' MXN';
+        document.getElementById('label-sub1').innerText = 'Monto a Financiar';
+        document.getElementById('val-sub1').innerText = '$' + loanAmount.toLocaleString('es-MX');
+        document.getElementById('label-sub2').innerText = 'Ingreso Mínimo Sugerido';
+        document.getElementById('val-sub2').innerText = '$' + requiredIncome.toLocaleString('es-MX') + ' / mes';
+
+        const waMsg = encodeURIComponent(`Hola Carlos, vi la ficha y calculé un crédito bancario con enganche de $${downpayment.toLocaleString('es-MX')} y mensualidad de $${totalMonthly.toLocaleString('es-MX')}. Quiero checar mi precalificación.`);
+        document.getElementById('btn-dynamic-wa').href = `https://wa.me/52${waNumber}?text=${waMsg}`;
+
+      } else {
+        const salary = parseInt(document.getElementById('info-salary-slider').value);
+        const ssv = parseInt(document.getElementById('info-ssv-slider').value);
+
+        document.getElementById('info-salary-label').innerText = '$' + salary.toLocaleString('es-MX') + ' MXN';
+        document.getElementById('info-ssv-label').innerText = '$' + ssv.toLocaleString('es-MX') + ' MXN';
+
+        let infoRate = 10.45;
+        if (salary <= 12000) infoRate = 3.90;
+        else if (salary <= 18000) infoRate = 6.50;
+        else if (salary <= 25000) infoRate = 8.85;
+        else if (salary <= 35000) infoRate = 9.80;
+
+        const maxMonthlyPayment = salary * 0.30;
+        const loanNeeded = Math.max(0, propertyPrice - ssv);
+        const pmtInfonavit = calculatePMT(loanNeeded, infoRate, selectedInfoYears);
+        const totalMonthly = Math.round(Math.min(pmtInfonavit, maxMonthlyPayment));
+
+        document.getElementById('result-title').innerText = `Descuento Vía Nómina (Tasa: ${infoRate}%)`;
+        document.getElementById('result-monthly').innerText = '$' + totalMonthly.toLocaleString('es-MX') + ' MXN';
+        document.getElementById('label-sub1').innerText = 'Saldo SSV Aplicado';
+        document.getElementById('val-sub1').innerText = '$' + ssv.toLocaleString('es-MX');
+        document.getElementById('label-sub2').innerText = 'Financiamiento Infonavit';
+        document.getElementById('val-sub2').innerText = '$' + loanNeeded.toLocaleString('es-MX');
+
+        const waMsg = encodeURIComponent(`Hola Carlos, calculé en la ficha un crédito Infonavit (Salario: $${salary.toLocaleString('es-MX')}, SSV: $${ssv.toLocaleString('es-MX')}). Me gustaría revisar mi puntuación y precalificación.`);
+        document.getElementById('btn-dynamic-wa').href = `https://wa.me/52${waNumber}?text=${waMsg}`;
+      }
+    }
+
+    calculateAll();
+  </script>
+
+</body>
+</html>
