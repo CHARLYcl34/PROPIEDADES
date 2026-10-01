@@ -149,6 +149,7 @@
       border: 2px solid transparent;
       flex-shrink: 0;
       transition: all 0.2s ease;
+      background: #E2E8F0;
     }
 
     .gallery-thumb.active {
@@ -160,6 +161,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
 
     .content-body { padding: 20px; }
@@ -524,18 +526,18 @@
       </div>
     </div>
 
-    <!-- Tira de Miniaturas Deslizable con tus 10 fotos -->
+    <!-- Tira de Miniaturas con los nombres exactos de GitHub -->
     <div class="gallery-strip">
       <div class="gallery-thumb active" onclick="setPhoto(0, this)"><img src="fachada.jpg" alt="Fachada"></div>
-      <div class="gallery-thumb" onclick="setPhoto(1, this)"><img src="sala.jpg" alt="Sala"></div>
-      <div class="gallery-thumb" onclick="setPhoto(2, this)"><img src="comedor.jpg" alt="Comedor"></div>
-      <div class="gallery-thumb" onclick="setPhoto(3, this)"><img src="cocina.jpg" alt="Cocina"></div>
-      <div class="gallery-thumb" onclick="setPhoto(4, this)"><img src="recamara.jpg" alt="Recámara Principal"></div>
-      <div class="gallery-thumb" onclick="setPhoto(5, this)"><img src="recamara%201.jpg" alt="Recámara 2"></div>
-      <div class="gallery-thumb" onclick="setPhoto(6, this)"><img src="recamara2.jpg" alt="Recámara 3"></div>
-      <div class="gallery-thumb" onclick="setPhoto(7, this)"><img src="baño.jpg" alt="Baño"></div>
-      <div class="gallery-thumb" onclick="setPhoto(8, this)"><img src="mediobaño.jpg" alt="Medio Baño"></div>
-      <div class="gallery-thumb" onclick="setPhoto(9, this)"><img src="pasilloservicio.jpg" alt="Pasillo de Servicio"></div>
+      <div class="gallery-thumb" onclick="setPhoto(1, this)"><img src="sala.JPG" alt="Sala"></div>
+      <div class="gallery-thumb" onclick="setPhoto(2, this)"><img src="comedor.JPG" alt="Comedor"></div>
+      <div class="gallery-thumb" onclick="setPhoto(3, this)"><img src="cocina.JPG" alt="Cocina"></div>
+      <div class="gallery-thumb" onclick="setPhoto(4, this)"><img src="rec%C3%A1mara.JPG" alt="Recámara"></div>
+      <div class="gallery-thumb" onclick="setPhoto(5, this)"><img src="rec%C3%A1mara%201.JPG" alt="Recámara 1"></div>
+      <div class="gallery-thumb" onclick="setPhoto(6, this)"><img src="rec%C3%A1mara2.JPG" alt="Recámara 2"></div>
+      <div class="gallery-thumb" onclick="setPhoto(7, this)"><img src="ba%C3%B1o.JPG" alt="Baño"></div>
+      <div class="gallery-thumb" onclick="setPhoto(8, this)"><img src="medioba%C3%B1o.JPG" alt="Medio Baño"></div>
+      <div class="gallery-thumb" onclick="setPhoto(9, this)"><img src="pasilloservicio.jpg" alt="Pasillo Servicio"></div>
     </div>
 
     <div class="content-body">
@@ -709,14 +711,14 @@
 
     const propertyPhotos = [
       "fachada.jpg",
-      "sala.jpg",
-      "comedor.jpg",
-      "cocina.jpg",
-      "recamara.jpg",
-      "recamara%201.jpg",
-      "recamara2.jpg",
-      "baño.jpg",
-      "mediobaño.jpg",
+      "sala.JPG",
+      "comedor.JPG",
+      "cocina.JPG",
+      "rec\u00E1mara.JPG",
+      "rec\u00E1mara 1.JPG",
+      "rec\u00E1mara2.JPG",
+      "ba\u00F1o.JPG",
+      "medioba\u00F1o.JPG",
       "pasilloservicio.jpg"
     ];
 
