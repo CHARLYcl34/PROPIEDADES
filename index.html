@@ -7,11 +7,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #0F382A;       /* Verde institucional */
+      --primary: #0F382A;
       --primary-light: #18523E;
       --accent: #D4AF37;
       --whatsapp: #25D366;
-      --infonavit: #D92534;     /* Rojo oficial Infonavit */
+      --infonavit: #D92534;
       --bg: #F1F5F9;
       --card-bg: #FFFFFF;
       --text: #0F172A;
@@ -69,7 +69,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Galería Visual Principal */
     .hero-media {
       position: relative;
       height: 260px;
@@ -87,7 +86,7 @@
       top: 0; left: 0; width: 100%; height: 100%;
       object-fit: cover;
       z-index: 1;
-      transition: opacity 0.3s ease-in-out;
+      transition: opacity 0.25s ease-in-out;
     }
 
     .hero-gradient {
@@ -131,28 +130,30 @@
       margin-top: 2px;
     }
 
-    /* Tira de Miniaturas Galería */
     .gallery-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      padding: 10px 16px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 16px;
       background: #F8FAFC;
       border-bottom: 1px solid var(--border);
+      scrollbar-width: thin;
     }
 
     .gallery-thumb {
+      min-width: 65px;
       height: 55px;
       border-radius: 8px;
       overflow: hidden;
       cursor: pointer;
       border: 2px solid transparent;
+      flex-shrink: 0;
       transition: all 0.2s ease;
     }
 
     .gallery-thumb.active {
       border-color: var(--primary);
-      transform: scale(0.96);
+      transform: scale(0.95);
     }
 
     .gallery-thumb img {
@@ -211,7 +212,6 @@
       display: block;
     }
 
-    /* Botón Google Maps Solitario y Limpio */
     .btn-maps-action {
       display: flex;
       align-items: center;
@@ -228,6 +228,7 @@
       margin-bottom: 22px;
       transition: all 0.2s ease;
     }
+
     .btn-maps-action:hover { background: #F8FAFC; border-color: #94A3B8; }
 
     .section-header {
@@ -297,7 +298,6 @@
       margin-top: 2px;
     }
 
-    /* Simulador Dual */
     .mortgage-calculator {
       background: #FFFFFF;
       border: 2px solid var(--border);
@@ -484,7 +484,6 @@
       color: var(--muted);
     }
 
-    /* Botón WhatsApp de Cierre (Visita Directa) */
     .btn-whatsapp-cta {
       background: var(--whatsapp);
       color: #FFFFFF;
@@ -516,7 +515,7 @@
 
     <!-- Visor de Portada Dinámica -->
     <div class="hero-media">
-      <img id="main-hero-img" class="hero-img-bg" src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80" alt="Fachada">
+      <img id="main-hero-img" class="hero-img-bg" src="fachada.jpg" alt="Fachada">
       <div class="hero-gradient"></div>
       <div class="hero-tag">En Venta • 2 Plantas</div>
       <div class="hero-overlay-text">
@@ -525,20 +524,18 @@
       </div>
     </div>
 
-    <!-- Tira de Fotos / Galería Interna -->
+    <!-- Tira de Miniaturas Deslizable con tus 10 fotos -->
     <div class="gallery-strip">
-      <div class="gallery-thumb active" onclick="setPhoto(0, this)">
-        <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=300&q=80" alt="Fachada">
-      </div>
-      <div class="gallery-thumb" onclick="setPhoto(1, this)">
-        <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=300&q=80" alt="Cocina">
-      </div>
-      <div class="gallery-thumb" onclick="setPhoto(2, this)">
-        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=300&q=80" alt="Recámara">
-      </div>
-      <div class="gallery-thumb" onclick="setPhoto(3, this)">
-        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=300&q=80" alt="Patio">
-      </div>
+      <div class="gallery-thumb active" onclick="setPhoto(0, this)"><img src="fachada.jpg" alt="Fachada"></div>
+      <div class="gallery-thumb" onclick="setPhoto(1, this)"><img src="sala.jpg" alt="Sala"></div>
+      <div class="gallery-thumb" onclick="setPhoto(2, this)"><img src="comedor.jpg" alt="Comedor"></div>
+      <div class="gallery-thumb" onclick="setPhoto(3, this)"><img src="cocina.jpg" alt="Cocina"></div>
+      <div class="gallery-thumb" onclick="setPhoto(4, this)"><img src="recamara.jpg" alt="Recámara Principal"></div>
+      <div class="gallery-thumb" onclick="setPhoto(5, this)"><img src="recamara%201.jpg" alt="Recámara 2"></div>
+      <div class="gallery-thumb" onclick="setPhoto(6, this)"><img src="recamara2.jpg" alt="Recámara 3"></div>
+      <div class="gallery-thumb" onclick="setPhoto(7, this)"><img src="baño.jpg" alt="Baño"></div>
+      <div class="gallery-thumb" onclick="setPhoto(8, this)"><img src="mediobaño.jpg" alt="Medio Baño"></div>
+      <div class="gallery-thumb" onclick="setPhoto(9, this)"><img src="pasilloservicio.jpg" alt="Pasillo de Servicio"></div>
     </div>
 
     <div class="content-body">
@@ -566,7 +563,6 @@
         </div>
       </div>
 
-      <!-- Ubicación Única -->
       <a href="https://maps.app.goo.gl/KEf251n3VZxJtZKT9" target="_blank" class="btn-maps-action">
         📍 Abrir Ubicación en Google Maps
       </a>
@@ -699,7 +695,6 @@
         </div>
       </div>
 
-      <!-- BOTÓN DE CIERRE DIRECTO A WHATSAPP -->
       <a href="https://wa.me/526681631420?text=Hola%20Carlos,%20me%20interesa%20la%20casa%20en%20Prado%20Bonito%20($1,700,000)%20y%20quiero%20ver%20la%20propiedad,%20%C2%BFcu%C3%A1ndo%20podemos%20agendar%20una%20visita?" target="_blank" class="btn-whatsapp-cta">
         💬 Quiero ver la propiedad, me interesa
       </a>
@@ -712,12 +707,17 @@
     let selectedBankYears = 20;
     let selectedInfoYears = 30;
 
-    // Galería interactiva: al tocar una foto cambia la principal
     const propertyPhotos = [
-      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"
+      "fachada.jpg",
+      "sala.jpg",
+      "comedor.jpg",
+      "cocina.jpg",
+      "recamara.jpg",
+      "recamara%201.jpg",
+      "recamara2.jpg",
+      "baño.jpg",
+      "mediobaño.jpg",
+      "pasilloservicio.jpg"
     ];
 
     function setPhoto(index, el) {
