@@ -255,7 +255,7 @@
 
     .btn-maps-action:hover { background: #F8FAFC; border-color: #94A3B8; }
 
-    /* Estilos para Puntos de Interés */
+    /* Puntos de Interés */
     .poi-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -493,7 +493,7 @@
       margin-top: 2px;
     }
 
-    /* Estilos del Desplegable de Requisitos */
+    /* Desplegable de Requisitos */
     .req-accordion {
       background: #FFFFFF;
       border: 2px solid var(--border);
@@ -851,7 +851,7 @@
         </div>
       </div>
 
-      <a href="https://wa.me/526681631420?text=Hola%20Carlos,%20me%20interesa%20la%20casa%20en%20Prado%20Bonito%20($1,700,000)%20y%20quiero%20ver%20la%20propiedad,%20%C2%BFcu%C3%A1ndo%20podemos%20agendar%20una%20visita?" target="_blank" class="btn-whatsapp-cta">
+      <a id="whatsapp-btn" href="#" target="_blank" class="btn-whatsapp-cta">
         💬 Quiero ver la propiedad, me interesa
       </a>
     </div>
@@ -949,6 +949,9 @@
     }
 
     function calculateAll() {
+      let monthlyText = "";
+      let creditTypeDesc = "";
+
       if (currentMode === 'bank') {
         const downPct = parseInt(document.getElementById('bank-down-slider').value);
         const annualRate = parseFloat(document.getElementById('bank-rate-slider').value);
@@ -969,6 +972,9 @@
         document.getElementById('val-sub1').innerText = '$' + loanAmount.toLocaleString('es-MX');
         document.getElementById('label-sub2').innerText = 'Ingreso Mínimo Sugerido';
         document.getElementById('val-sub2').innerText = '$' + requiredIncome.toLocaleString('es-MX') + ' / mes';
+
+        monthlyText = `$${totalMonthly.toLocaleString('es-MX')} MXN/mes (${selectedBankYears} años, enganche ${downPct}%)`;
+        creditTypeDesc = "Crédito Bancario";
       } else {
         const salary = parseInt(document.getElementById('info-salary-slider').value);
         const ssv = parseInt(document.getElementById('info-ssv-slider').value);
@@ -993,7 +999,15 @@
         document.getElementById('val-sub1').innerText = '$' + ssv.toLocaleString('es-MX');
         document.getElementById('label-sub2').innerText = 'Financiamiento Infonavit';
         document.getElementById('val-sub2').innerText = '$' + loanNeeded.toLocaleString('es-MX');
+
+        monthlyText = `$${totalMonthly.toLocaleString('es-MX')} MXN/mes vía nómina (${selectedInfoYears} años, salario $${salary.toLocaleString('es-MX')})`;
+        creditTypeDesc = "Infonavit";
       }
+
+      // Actualizar dinámicamente el enlace de WhatsApp con los datos simulados
+      const msg = `Hola Carlos, me interesa la casa en Prado Bonito ($1,700,000). Hice mi simulación por ${creditTypeDesc} y obtuvo un estimado de ${monthlyText}. ¿Cuándo podemos agendar una visita?`;
+      const encodedMsg = encodeURIComponent(msg);
+      document.getElementById('whatsapp-btn').href = `https://wa.me/526681631420?text=${encodedMsg}`;
     }
 
     calculateAll();
