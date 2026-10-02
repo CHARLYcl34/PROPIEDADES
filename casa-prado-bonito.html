@@ -255,6 +255,27 @@
 
     .btn-maps-action:hover { background: #F8FAFC; border-color: #94A3B8; }
 
+    /* Estilos para Puntos de Interés */
+    .poi-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .poi-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #F8FAFC;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text);
+      font-weight: 500;
+    }
+    .poi-icon { font-size: 16px; }
+
     .section-header {
       font-family: 'Montserrat', sans-serif;
       font-size: 13px;
@@ -472,6 +493,51 @@
       margin-top: 2px;
     }
 
+    /* Estilos del Desplegable de Requisitos */
+    .req-accordion {
+      background: #FFFFFF;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 24px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .req-summary {
+      padding: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+    }
+    .req-summary::-webkit-details-marker { display: none; }
+    .req-icon {
+      font-size: 18px;
+      font-weight: 400;
+      transition: transform 0.3s ease;
+    }
+    details[open] .req-icon {
+      transform: rotate(45deg);
+    }
+    .req-content {
+      padding: 0 16px 16px 16px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .req-content ul {
+      margin-top: 10px;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+    .req-content ul li {
+      margin-bottom: 6px;
+    }
+
     .agent-box {
       display: flex;
       align-items: center;
@@ -630,6 +696,15 @@
         📍 Abrir Ubicación en Google Maps
       </a>
 
+      <!-- Puntos de Interés -->
+      <div class="section-header">Puntos de Interés Cercanos</div>
+      <div class="poi-grid">
+        <div class="poi-item"><span class="poi-icon">🛣️</span> Salida rápida a Blvd. Centenario y Blvd. Macario Gaxiola</div>
+        <div class="poi-item"><span class="poi-icon">🛒</span> A 5 min de Bodega Aurrera, Oxxo y comercios locales</div>
+        <div class="poi-item"><span class="poi-icon">🏫</span> Cercanía a escuelas nivel básico y Ciudad Universitaria (UAS)</div>
+        <div class="poi-item"><span class="poi-icon">🌳</span> A un par de minutos de áreas verdes y deportivas de la zona</div>
+      </div>
+
       <div class="section-header">Distribución del Inmueble</div>
       <div class="tab-pills">
         <button class="tab-btn active" onclick="switchTab('exterior', this)">Exterior</button>
@@ -749,6 +824,24 @@
           </div>
         </div>
       </div>
+
+      <!-- Desplegable de Requisitos -->
+      <details class="req-accordion">
+        <summary class="req-summary">
+          📄 Ver Requisitos para Trámite
+          <span class="req-icon">+</span>
+        </summary>
+        <div class="req-content">
+          <p>Para apartar la propiedad e iniciar la gestión de tu crédito, necesitarás la siguiente documentación básica:</p>
+          <ul>
+            <li><strong>Identificación Oficial:</strong> INE o Pasaporte vigente.</li>
+            <li><strong>Acta de Nacimiento:</strong> Formato original o digital reciente.</li>
+            <li><strong>Número de Seguridad Social (NSS):</strong> Formato descargado del portal.</li>
+            <li><strong>Situación Fiscal:</strong> Constancia (CSF) actualizada con RFC.</li>
+            <li><strong>Comprobante de domicilio:</strong> No mayor a 3 meses.</li>
+          </ul>
+        </div>
+      </details>
 
       <div class="agent-box">
         <div class="agent-avatar">CC</div>
