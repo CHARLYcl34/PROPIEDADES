@@ -8,7 +8,11 @@
   
   <meta property="og:title" content="Casa en Venta | Prado Bonito">
   <meta property="og:description" content="Residencial 2 Plantas • $1,700,000 MXN. Haz clic para ver la galería completa, detalles y simulador de crédito.">
-  <meta property="og:image" content="https://palosverdesinmobiliaria.github.io/PROPIEDADES/fachada.jpg">
+  <meta property="og:image" content="https://palosverdesinmobiliaria.github.io/PROPIEDADES/fachada.jpg?v=4">
+  <meta property="og:image:secure_url" content="https://palosverdesinmobiliaria.github.io/PROPIEDADES/fachada.jpg?v=4">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://palosverdesinmobiliaria.github.io/PROPIEDADES/casa-prado-bonito.html">
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -692,17 +696,18 @@
         </div>
       </div>
 
-      <a href="https://maps.app.goo.gl/KEf251n3VZxJtZKT9" target="_blank" class="btn-maps-action">
-        📍 Abrir Ubicación en Google Maps
+      <!-- UBICACIÓN EXACTA CON TU LINK DE GOOGLE MAPS -->
+      <a href="https://maps.app.goo.gl/pcREzXGavgYZZcwWA" target="_blank" class="btn-maps-action">
+        📍 Abrir Ubicación Exacta en Google Maps
       </a>
 
-      <!-- Puntos de Interés -->
+      <!-- Puntos de Interés con Parques -->
       <div class="section-header">Puntos de Interés Cercanos</div>
       <div class="poi-grid">
-        <div class="poi-item"><span class="poi-icon">🛣️</span> Salida rápida a Blvd. Centenario y Blvd. Macario Gaxiola</div>
-        <div class="poi-item"><span class="poi-icon">🛒</span> A 5 min de Bodega Aurrera, Oxxo y comercios locales</div>
-        <div class="poi-item"><span class="poi-icon">🏫</span> Cercanía a escuelas nivel básico y Ciudad Universitaria (UAS)</div>
-        <div class="poi-item"><span class="poi-icon">🌳</span> A un par de minutos de áreas verdes y deportivas de la zona</div>
+        <div class="poi-item"><span class="poi-icon">🛣️</span> A 2 min de Blvd. Centenario y Blvd. Macario Gaxiola</div>
+        <div class="poi-item"><span class="poi-icon">🛒</span> A 4 min de Bodega Aurrera Centenario y Oxxo</div>
+        <div class="poi-item"><span class="poi-icon">🏫</span> A 6 min de Ciudad Universitaria (UAS) y escuelas cercanas</div>
+        <div class="poi-item"><span class="poi-icon">🌳</span> Cercanía a parques y áreas verdes recreativas del fraccionamiento</div>
       </div>
 
       <div class="section-header">Distribución del Inmueble</div>
@@ -1004,7 +1009,6 @@
         creditTypeDesc = "Infonavit";
       }
 
-      // Actualizar dinámicamente el enlace de WhatsApp con los datos simulados
       const msg = `Hola Carlos, me interesa la casa en Prado Bonito ($1,700,000). Hice mi simulación por ${creditTypeDesc} y obtuvo un estimado de ${monthlyText}. ¿Cuándo podemos agendar una visita?`;
       const encodedMsg = encodeURIComponent(msg);
       document.getElementById('whatsapp-btn').href = `https://wa.me/526681631420?text=${encodedMsg}`;
