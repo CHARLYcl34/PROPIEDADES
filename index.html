@@ -138,16 +138,17 @@
       background: #F8FAFC;
       border-bottom: 1px solid var(--border);
       scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
     }
 
     .gallery-thumb {
-      min-width: 65px;
+      width: 65px;
       height: 55px;
+      flex: 0 0 65px;
       border-radius: 8px;
       overflow: hidden;
       cursor: pointer;
       border: 2px solid transparent;
-      flex-shrink: 0;
       transition: all 0.2s ease;
       background: #E2E8F0;
     }
@@ -526,17 +527,17 @@
       </div>
     </div>
 
-    <!-- Tira de Miniaturas con los nombres exactos de GitHub -->
+    <!-- Tira de Miniaturas con lectura directa de acentos -->
     <div class="gallery-strip">
       <div class="gallery-thumb active" onclick="setPhoto(0, this)"><img src="fachada.jpg" alt="Fachada"></div>
       <div class="gallery-thumb" onclick="setPhoto(1, this)"><img src="sala.JPG" alt="Sala"></div>
       <div class="gallery-thumb" onclick="setPhoto(2, this)"><img src="comedor.JPG" alt="Comedor"></div>
       <div class="gallery-thumb" onclick="setPhoto(3, this)"><img src="cocina.JPG" alt="Cocina"></div>
-      <div class="gallery-thumb" onclick="setPhoto(4, this)"><img src="rec%C3%A1mara.JPG" alt="Recámara"></div>
-      <div class="gallery-thumb" onclick="setPhoto(5, this)"><img src="rec%C3%A1mara%201.JPG" alt="Recámara 1"></div>
-      <div class="gallery-thumb" onclick="setPhoto(6, this)"><img src="rec%C3%A1mara2.JPG" alt="Recámara 2"></div>
-      <div class="gallery-thumb" onclick="setPhoto(7, this)"><img src="ba%C3%B1o.JPG" alt="Baño"></div>
-      <div class="gallery-thumb" onclick="setPhoto(8, this)"><img src="medioba%C3%B1o.JPG" alt="Medio Baño"></div>
+      <div class="gallery-thumb" onclick="setPhoto(4, this)"><img src="recámara.JPG" alt="Recámara"></div>
+      <div class="gallery-thumb" onclick="setPhoto(5, this)"><img src="recámara 1.JPG" alt="Recámara 1"></div>
+      <div class="gallery-thumb" onclick="setPhoto(6, this)"><img src="recámara2.JPG" alt="Recámara 2"></div>
+      <div class="gallery-thumb" onclick="setPhoto(7, this)"><img src="baño.JPG" alt="Baño"></div>
+      <div class="gallery-thumb" onclick="setPhoto(8, this)"><img src="mediobaño.JPG" alt="Medio Baño"></div>
       <div class="gallery-thumb" onclick="setPhoto(9, this)"><img src="pasilloservicio.jpg" alt="Pasillo Servicio"></div>
     </div>
 
@@ -714,11 +715,11 @@
       "sala.JPG",
       "comedor.JPG",
       "cocina.JPG",
-      "rec\u00E1mara.JPG",
-      "rec\u00E1mara 1.JPG",
-      "rec\u00E1mara2.JPG",
-      "ba\u00F1o.JPG",
-      "medioba\u00F1o.JPG",
+      "recámara.JPG",
+      "recámara 1.JPG",
+      "recámara2.JPG",
+      "baño.JPG",
+      "mediobaño.JPG",
       "pasilloservicio.jpg"
     ];
 
